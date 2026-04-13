@@ -1,4 +1,7 @@
 .movie-card {
+  min-width: calc((100% - 40px) / 3); /* 3 cards */
+  max-width: calc((100% - 40px) / 3);
+  flex-shrink: 0;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -107,7 +110,7 @@
   margin-top: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 100px) {
   .movie-card {
     font-size: 0.9rem;
   }

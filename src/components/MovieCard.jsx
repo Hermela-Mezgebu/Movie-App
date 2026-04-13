@@ -1,47 +1,53 @@
-import { BsHeart } from "react-icons/bs";
-import "../css/MovieCard.css";
-import { useMovieContext } from "../contexts/MovieContext";
+import { getImageUrl } from "../services/api";
+import { useState } from "react";
+import TrailerModal from "../pages/TrailerModal";
 
-function MovieCard({ movie }) {
-  const {
-    isFavorite,
-    addToFavorites,
-    removeFromFavorites,
-  } = useMovieContext();
+export default function MovieCard({ movie }) {
+  const [hover, setHover] = useState(false);
 
-  const favorite = isFavorite(movie.id);
+  const title = movie.title || movie.name;
+  const image = movie.poster_path;
 
-  function onFavoriteClick(e) {
-    e.preventDefault();
-    if (favorite) {
-      removeFromFavorites(movie.id);
-    } else {
-      addToFavorites(movie);
-    }
-  }
+  const [video, setVideo] = useState(null);
+
+const handlePlay = async () => {
+  const vids = await getTrailer(movie.id, movie.media_type || "movie");
+  const trailer = vids.find(v => v.type === "Trailer");
+  if (trailer) setVideo(trailer.key);
+};
 
   return (
-    <div className="movie-card">
-      <div className="movie-poster">
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-        />
+    <div
+      className="relative w-44 flex-shrink-0 cursor-pointer group"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {/* IMAGE */}
+      <img
+        src={getImageUrl(image)}
+        className={`rounded-xl transition-all duration-300 ${
+          hover ? "scale-110 brightness-75" : ""
+        }`}
+      />
 
-        <button
-          className={`favorite-btn ${favorite ? "active" : ""}`}
-          onClick={onFavoriteClick}
-        >
-          <BsHeart />
-        </button>
-      </div>
+      {/* HOVER CONTENT */}
+      {hover && (
+        <div className="absolute inset-0 p-3 flex flex-col justify-end bg-black/60 rounded-xl">
+          <h3 className="text-sm font-bold">{title}</h3>
 
-      <div className="movie-info">
-        <h3>{movie.title}</h3>
-        <p>{movie.release_date}</p>
-      </div>
+          <div className="flex items-center gap-2 text-xs mt-1">
+            <span className="text-brand">★ {movie.vote_average}</span>
+            <span>{movie.media_type === "tv" ? "TV" : "Movie"}</span>
+          </div>
+
+       <button onClick={handlePlay}>▶ Play</button>
+
+{video && (
+  <TrailerModal videoKey={video} onClose={() => setVideo(null)} />
+)}
+
+        </div>
+      )}
     </div>
   );
 }
-
-export default MovieCard;
