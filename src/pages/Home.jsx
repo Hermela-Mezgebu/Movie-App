@@ -9,6 +9,7 @@ import {
 } from "../services/api";
 
 import MovieList from "../components/MovieList";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [hero, setHero] = useState([]);
@@ -88,11 +89,10 @@ export default function Home() {
               {current.overview}
             </p>
 
-           <Link to={`/movie/${movie.id}`}>
-  <button className="flex items-center gap-2 bg-brand text-bg-dark px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform">
-    <Play fill="currentColor" size={18} />
-              ▶ Watch Now
-         </button>
+          <Link to={`/movie/${current.id}`}>
+  <button className="bg-brand px-6 py-3 rounded-xl font-bold hover:scale-105">
+    ▶ Watch Now
+  </button>
 </Link>
           </div>
 
