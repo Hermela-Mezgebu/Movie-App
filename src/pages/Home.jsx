@@ -64,7 +64,7 @@ export default function Home() {
   const current = hero[index];
 
   return (
-    <main className="ml-64 p-8 pt-0">
+    <main className="p-8 pt-0">
 
       {/* HERO */}
       {current && (

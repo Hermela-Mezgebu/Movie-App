@@ -67,12 +67,31 @@ export const getKDrama = () =>
     with_original_language: "ko",
   });
 
-// 🔍 SEARCH
+export const getUpcomingMovies = async () => {
+  const response = await api.get('/movie/upcoming');
+  return response.data.results;
+};
+
 export const searchMovies = async (query) => {
-  const res = await api.get("/search/multi", {
+  const response = await api.get('/search/movie', {
     params: { query },
   });
-  return res.data.results;
+  return response.data.results;
+};
+
+export const getMovieDetails = async (id) => {
+  const response = await api.get(`/movie/${id}`);
+  return response.data;
+};
+
+export const getMovieCredits = async (id) => {
+  const response = await api.get(`/movie/${id}/credits`);
+  return response.data;
+};
+
+export const getSimilarMovies = async (id) => {
+  const response = await api.get(`/movie/${id}/similar`);
+  return response.data.results;
 };
 
 
