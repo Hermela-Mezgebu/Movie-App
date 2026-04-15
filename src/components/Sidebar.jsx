@@ -77,7 +77,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
+    <Link to = "/app">
       <div className="p-4">
         <button className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-bg-dark font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand/20">
           <Download size={18} />
@@ -87,6 +87,7 @@ export default function Sidebar() {
           </div>
         </button>
       </div>
+      </Link>
     </aside>
   );
 }

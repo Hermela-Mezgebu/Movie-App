@@ -21,6 +21,7 @@ import {
 import { FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 import { motion } from 'framer-motion';
+import { useRef } from "react";
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -29,6 +30,38 @@ export default function MovieDetail() {
   const [cast, setCast] = useState([]);
   const [similar, setSimilar] = useState([]);
   const [activeTab, setActiveTab] = useState('Episodes');
+  const episodesRef = useRef(null);
+const castRef = useRef(null);
+const reviewRef = useRef(null);
+
+const scrollWithOffset = (element) => {
+  const yOffset = -100; // adjust this value (80–120)
+  const y =
+    element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+  window.scrollTo({ top: y, behavior: "smooth" });
+};
+
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollY = window.scrollY;
+
+    const episodesTop = episodesRef.current.offsetTop - 120;
+    const castTop = castRef.current.offsetTop - 120;
+    const reviewTop = reviewRef.current.offsetTop - 120;
+
+    if (scrollY >= reviewTop) {
+      setActiveTab("User Review");
+    } else if (scrollY >= castTop) {
+      setActiveTab("Top Cast");
+    } else {
+      setActiveTab("Episodes");
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,23 +184,38 @@ return (
 <div className="flex gap-12">
   <div className="flex-1">
     {/* Tabs */}
-    <div className="flex gap-8 border-b border-white/5 mb-8">
-      {['Episodes', 'Top Cast', 'User Review'].map((tab) => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          className={`pb-4 text-sm font-bold transition-all relative ${activeTab === tab ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
-        >
-          {tab}
-          {activeTab === tab && (
-            <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand" />
-          )}
-        </button>
-      ))}
-    </div>
+  {/* Tabs */}
+<div className="sticky top-0 z-40 bg-bg-dark/80 backdrop-blur-md flex gap-8 border-b border-white/5 mb-8 pt-4">
+  {['Episodes', 'Top Cast', 'User Review'].map((tab) => (
+    <button
+      key={tab}
+      onClick={() => {
+        setActiveTab(tab);
+
+        if (tab === "Episodes") scrollWithOffset(episodesRef.current);
+        if (tab === "Top Cast") scrollWithOffset(castRef.current);
+        if (tab === "User Review") scrollWithOffset(reviewRef.current);
+      }}
+      className={`pb-4 text-sm font-bold transition-all relative ${
+        activeTab === tab
+          ? "text-white"
+          : "text-gray-500 hover:text-gray-300"
+      }`}
+    >
+      {tab}
+
+      {activeTab === tab && (
+        <motion.div
+          layoutId="activeTab"
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand"
+        />
+      )}
+    </button>
+  ))}
+</div>
 
     {/* Episodes */}
-    <div className="mb-12">
+    <div className="mb-12" ref={episodesRef}>
       <h2 className="text-xl font-bold mb-6">Episodes</h2>
       <div className="flex gap-3 mb-8">
         {['film', 'lklk', 'Netflix', 'Plex'].map(tag => (
@@ -179,7 +227,7 @@ return (
     </div>
 
     {/* Cast */}
-    <div className="mb-12">
+    <div className="mb-12" ref={castRef}>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">Top Cast({cast.length})</h2>
         <button className="w-8 h-8 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10">
@@ -205,7 +253,7 @@ return (
     </div>
 
     {/* Review */}
-    <div>
+    <div ref={reviewRef}>
       <h2 className="text-xl font-bold mb-6">User Review</h2>
       <div className="bg-white/5 rounded-3xl p-6 flex gap-4">
         <div className="w-12 h-12 rounded-full bg-brand/20 flex items-center justify-center text-brand font-bold">P</div>

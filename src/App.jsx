@@ -2,6 +2,13 @@ import { Routes, Route } from "react-router-dom";
 
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/NavBar";
+import Tv from "./pages/Tv";
+import Movie from "./pages/Movie";
+import Animation from "./pages/Animation";
+import Popular from "./pages/Popular";
+import Watched from "./pages/Watched";
+import AppPage from "./pages/AppPage";
+import Search from "./pages/Search";
 
 import Home from "./pages/Home";
 import MovieDetail from "./pages/MovieDetail";
@@ -21,6 +28,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/tv" element={<Tv />} />
+          <Route path="/movie" element={<Movie />} />
+  <Route path="/animation" element={<Animation />} />
+  <Route path="/popular" element={<Popular />} />
+  <Route path="/watched" element={<Watched />} />
+  <Route path="/app" element={<AppPage />} />
+  <Route path="/search" element={<Search />} />
         </Routes>
 
         {/* Footer */}
