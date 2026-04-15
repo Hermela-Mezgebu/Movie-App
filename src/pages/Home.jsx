@@ -88,9 +88,12 @@ export default function Home() {
               {current.overview}
             </p>
 
-            <button className="bg-brand px-6 py-3 rounded-xl font-bold hover:scale-105">
+           <Link to={`/movie/${movie.id}`}>
+  <button className="flex items-center gap-2 bg-brand text-bg-dark px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform">
+    <Play fill="currentColor" size={18} />
               ▶ Watch Now
-            </button>
+         </button>
+</Link>
           </div>
 
           {/* LEFT ARROW */}
